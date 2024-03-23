@@ -14,11 +14,11 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        location : String,
+        department : String,
         description : String,
         picturePath: String,
         userPicturePath: String,
-        like:{
+        likes:{
             type: Map,
             of: Boolean,
         },

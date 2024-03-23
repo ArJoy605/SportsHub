@@ -45,7 +45,7 @@ const UserWidget = ({ userId, picturePath }) => {
     const {
         firstName,
         lastName,
-        location,
+        department,
         occupation,
         viewedProfile,
         impressions,
@@ -88,7 +88,7 @@ const UserWidget = ({ userId, picturePath }) => {
             <Box p="1rem 0">
                 <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
                     <Groups3 fontSize="large" sx={{ color: main }} />
-                    <Typography color={medium}>{location}</Typography>
+                    <Typography color={medium}>{department}</Typography>
                 </Box>
                 <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
                     <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />

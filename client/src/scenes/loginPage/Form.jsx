@@ -24,7 +24,7 @@ const registerSchema = yup.object().shape({
     lastName: yup.string().required("required"),
     email: yup.string().email("invalid email").required("required"),
     password: yup.string().required("required"),
-    location: yup.string().required("required"),
+    department: yup.string().required("required"),
     occupation: yup.string().required("required"),
     picture: yup.string().required("required"),
 
@@ -41,7 +41,7 @@ const initialValuesRegister = {
     lastName: "",
     email: "",
     password: "",
-    location: "",
+    department: "",
     occupation: "",
     picture: ""
 };
@@ -53,6 +53,8 @@ const initialValuesLogin = {
 
 const Form = () => {
     const [pageType, setPageType] = useState("login");
+    const [invalid, setInvalid] = useState(false);
+    const [signUpFailed, setSignUpFailed] = useState(false);
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -61,52 +63,79 @@ const Form = () => {
     const isRegister = pageType === "register";
 
     const register = async (values, onSubmitProps) => {
-        const formData = new FormData();
-        for (let value in values) {
-            formData.append(value, values[value])
-        }
-
-        formData.append('picturePath', values.picture.name);
-
-        const savedUserResponse = await fetch(
-            "http://27.54.151.248:3001/auth/register",
-            {
-                method: "POST",
-                body: formData,
+        try {
+            const formData = new FormData();
+            for (let value in values) {
+                formData.append(value, values[value]);
             }
-        );
 
-        const savedUser = await savedUserResponse.json();
-        onSubmitProps.resetForm();
+            formData.append('picturePath', values.picture.name);
 
-        if (savedUser) {
-            setPageType("login");
+            const savedUserResponse = await fetch(
+                "http://27.54.151.248:3001/auth/register",
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            if (!savedUserResponse.ok) {
+                throw new Error("Failed to register user"); // Handle non-200 status codes
+            }
+
+            const savedUser = await savedUserResponse.json();
+            onSubmitProps.resetForm();
+
+            if (savedUser) {
+                setPageType("login");
+            }
+        } catch (error) {
+            console.error("Error registering user:", error);
+            // Handle error - e.g., display an error message to the user
+            setSignUpFailed(true); // Set invalid state to true
+            setTimeout(() => {
+                setSignUpFailed(false); // Reset invalid state to false after 1 second
+            }, 1700);
         }
     };
 
+
     const login = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch(
-            "http://27.54.151.248:3001/auth/login",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-            }
-        );
-
-        const loggedIn = await loggedInResponse.json();
-        onSubmitProps.resetForm();
-        if (loggedIn) {
-            dispatch(
-                setLogin({
-                    user: loggedIn.user,
-                    token: loggedIn.token,
-                })
+        try {
+            const loggedInResponse = await fetch(
+                "http://27.54.151.248:3001/auth/login",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values),
+                }
             );
-            navigate("/home")
-        }
 
-    }
+            if (!loggedInResponse.ok) {
+                throw new Error("Failed to log in"); // Handle non-200 status codes
+            }
+
+            const loggedIn = await loggedInResponse.json();
+            onSubmitProps.resetForm();
+            if (loggedIn) {
+                dispatch(
+                    setLogin({
+                        user: loggedIn.user,
+                        token: loggedIn.token,
+                    })
+                );
+                navigate("/home")
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            setInvalid(true); // Set invalid state to true
+            setTimeout(() => {
+                setInvalid(false); // Reset invalid state to false after 1 second
+            }, 1700);
+        }
+    };
+
+
 
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isLogin) await login(values, onSubmitProps);
@@ -157,12 +186,12 @@ const Form = () => {
                                 <Box sx={{ gridColumn: "span 4" }}>
                                     <Typography sx={{ color: palette.text.primary }}>Department</Typography>
                                     <Select
-                                        value={values.location}
+                                        value={values.department}
                                         onChange={handleChange}
-                                        name="location"
+                                        name="department"
                                         onBlur={handleBlur}
-                                        error={Boolean(touched.location) && Boolean(errors.location)}
-                                        helperText={touched.location && errors.location}
+                                        error={Boolean(touched.department) && Boolean(errors.department)}
+                                        helperText={touched.department && errors.department}
                                         sx={{
                                             width: '100%',
                                             '& .MuiSelect-root': {
@@ -269,6 +298,18 @@ const Form = () => {
                         />
                     </Box>
                     {/*Buttons */}
+
+                    {invalid && (
+                        <Typography sx={{ color: 'red', textAlign: 'center', gridColumn: 'span 4' }}>
+                            Invalid Credentials! Try Again.
+                        </Typography>
+                    )}
+
+                    {signUpFailed && (
+                        <Typography sx={{ color: 'red', textAlign: 'center', gridColumn: 'span 4' }}>
+                            Sign UP Failed! Try Again.
+                        </Typography>
+                    )}
                     <Box>
                         <Button
                             fullWidth
