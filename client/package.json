@@ -11,6 +11,7 @@
     "joy": "vite --host"
   },
   "dependencies": {
+    "@date-io/date-fns": "^3.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fullcalendar/core": "^6.1.11",
@@ -19,9 +20,13 @@
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
     "@mui/icons-material": "^5.15.14",
+    "@mui/lab": "^5.0.0-alpha.169",
     "@mui/material": "^5.15.14",
+    "@mui/x-data-grid": "^7.0.0",
+    "@mui/x-date-pickers": "^7.0.0",
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.8",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formik": "^2.4.5",
     "fullcalendar": "^6.1.11",

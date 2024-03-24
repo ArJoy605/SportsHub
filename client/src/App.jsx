@@ -10,7 +10,7 @@ import { themeSettings } from "@/theme";
 
 import Modal from "react-modal";
 Modal.setAppElement("#root");
-import CalendarEvents from "@/components/CalendarEvents";
+import EventPage from "@/scenes/eventPage";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -34,7 +34,7 @@ function App() {
             />
             <Route
               path="/calendar"
-              element={<CalendarEvents/>}
+              element={isAuth?<EventPage/>:<Navigate to="/"/>}
             />
           </Routes>
         </ThemeProvider>
