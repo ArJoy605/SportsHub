@@ -8,6 +8,10 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "@/theme";
 
+import Modal from "react-modal";
+Modal.setAppElement("#root");
+import CalendarEvents from "@/components/CalendarEvents";
+
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -27,6 +31,10 @@ function App() {
             <Route
               path="/profile/:userId"
               element={isAuth?<ProfilePage/>:<Navigate to="/"/>}
+            />
+            <Route
+              path="/calendar"
+              element={<CalendarEvents/>}
             />
           </Routes>
         </ThemeProvider>

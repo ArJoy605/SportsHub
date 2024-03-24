@@ -5,6 +5,7 @@ import './index.css';
 import authReducer from "./states";
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import "react-datetime/css/react-datetime.css";
 
 import {
   persistStore,
