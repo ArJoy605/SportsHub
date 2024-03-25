@@ -11,7 +11,6 @@ const FriendListWidget = ({ userId }) => {
     const { palette } = useTheme();
     const token = useSelector((state) => state.token);
     const friends = useSelector((state) => state.user.friends);
-    const [see, setSee] = useState(false);
 
 
     const getFriends = async () => {
@@ -24,12 +23,12 @@ const FriendListWidget = ({ userId }) => {
         );
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         dispatch(setFriends({ friends: data }));
-        friends.map((friend) => {
-            console.log(friend.firstName);
-        })
-        setSee(true);
+        // friends.map((friend) => {
+        //     console.log(friend.firstName);
+        // })
+        // setSee(true);
     };
 
     useEffect(() => {
@@ -38,7 +37,7 @@ const FriendListWidget = ({ userId }) => {
 
     return (
         <>
-        {see && <WidgetWrapper>
+        { <WidgetWrapper>
             <Typography
                 color={palette.neutral.dark}
                 variant="h5"

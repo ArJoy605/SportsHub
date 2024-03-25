@@ -71,6 +71,15 @@ const Navbar = () => {
         // setSuggestions(data.suggestions);
     };
 
+    const hanleSearchClick = (id)=>{
+        console.log(id);
+        // navigate(`/profile/${id}`);
+
+        const route = `/profile/${id}`;
+    console.log("Navigating to route:", route);
+    navigate(route);
+    }
+
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -145,7 +154,7 @@ const Navbar = () => {
                                         const fullName = `${item.firstName} ${item.lastName}`;
                                         return new RegExp(`^${searchQuery}`, 'i').test(fullName);
                                     }).map((item) => (
-                                        <MenuItem key={item._id} onClick={() => navigate(`/profile/${item._id}`)}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+                                        <MenuItem key={item._id} onClick={()=>hanleSearchClick(item._id)}>{`${item.firstName} ${item.lastName}`}</MenuItem>
                                     ))}
                                 </FormControl>
 
