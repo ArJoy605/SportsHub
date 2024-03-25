@@ -12,6 +12,35 @@ export const getUser = async (req, res) => {
     }
 }
 
+
+export const getUsers = async (req, res) => {
+    try {
+        const { searchQuery } = req.params;
+        
+        // Search for users whose full name matches the searchQuery
+        const users = await User.find({
+            $or: [
+                { 
+                    $expr: {
+                        $regexMatch: {
+                            input: { $concat: ["$firstName", " ", "$lastName"] },
+                            regex: searchQuery,
+                            options: "i"
+                        }
+                    }
+                }
+            ]
+        });
+
+        res.status(200).json(users);
+    }
+    catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
+
+
 export const getUserFriends = async (req, res) => {
     try {
         const { id } = req.params;
@@ -21,7 +50,7 @@ export const getUserFriends = async (req, res) => {
             user.friends.map((id) => User.findById(id))
         );
 
-        const formattedFriends = friends.map(
+        const formattedFriends = await friends.map(
             ({ _id, firstName, lastName, occupation, department, picturePath }) => {
                 return { _id, firstName, lastName, occupation, department, picturePath };
             }
@@ -55,7 +84,7 @@ export const addRemoveFriend = async (req, res) => {
             user.friends.map((id) => User.findById(id))
         );
 
-        const formattedFriends = friends.map(
+        const formattedFriends = await friends.map(
             ({ _id, firstName, lastName, occupation, department, picturePath }) => {
                 return { _id, firstName, lastName, occupation, department, picturePath };
             }

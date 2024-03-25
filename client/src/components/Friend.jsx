@@ -20,8 +20,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   const medium = palette.neutral.medium;
 
     // const isFriend = true;
-    console.log(_id);
-    console.log(friends);
+    // console.log(_id);
+    // console.log(friends);
   const isFriend = friends.find((friend) => friend._id === friendId);
   
 

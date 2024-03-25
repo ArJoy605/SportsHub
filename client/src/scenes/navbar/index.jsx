@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import {
     Box,
     IconButton,
@@ -9,7 +10,9 @@ import {
     FormControl,
     useTheme,
     useMediaQuery,
-    ListItem
+    ListItem,
+    InputAdornment,
+    TextField
 } from "@mui/material";
 
 import {
@@ -36,29 +39,28 @@ const Navbar = () => {
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const isNonVerySmallScreens = useMediaQuery("(min-width:600px");
     const [searchQuery, setSearchQuery] = useState('');
+    const [data, setdata] = useState([]);
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
     const dark = theme.palette.neutral.dark;
     const background = theme.palette.background.default;
+    const primary = theme.palette.primary.main;
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
 
     const fullName = `${user.firstName} ${user.lastName}`;
 
-    const fetchData = (value) =>{
-        fetch("https://jsonplaceholder.typicode.com/users")
-        .then((response) => response.json())
-        .then((json) =>{
-            const results = json.filter((user)=>{
-                return value && user && user.name && user.name.toLowerCase().includes(value);
-            });
-            console.log(results);
-        });
+    const fetchData = async (value) => {
+        const response = await axios.get(`http://27.54.151.248:3001/users/getusers/${value}`);
+        const data = await response.data;
+        setdata(data);
+
     };
 
-    const handleSearch =  (value) => {
+    const handleSearch = (value) => {
         setSearchQuery(value);
         fetchData(value);
 
@@ -73,7 +75,7 @@ const Navbar = () => {
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
             <FlexBetween gap="1.75rem">
-                {isNonMobileScreens ? (<Typography
+                {isNonVerySmallScreens ? (<Typography
                     fontWeight="bold" fontSize="clamp(1rem, 2rem, 2.25rem)" color="primary"
                     onClick={() => navigate("/home")}
                     sx={{
@@ -84,7 +86,7 @@ const Navbar = () => {
                     }} >
                     SportsHUB
                 </Typography>) : <Typography
-                    fontWeight="bold" fontSize="clamp(.8rem, 2rem, 1.7rem)" color="primary"
+                    fontWeight="bold" fontSize="clamp(.7rem, 2rem, 160%)" color="primary"
                     onClick={() => navigate("/home")}
                     sx={{
                         "&:hover": {
@@ -94,14 +96,125 @@ const Navbar = () => {
                     }} >
                     SportsHUB
                 </Typography>}
-                {(
-                    <FlexBetween backgroundColor={neutralLight} borderRadius="20px" gap="1rem" padding="0.2rem 1.8rem">
-                    <InputBase placeholder="Search...." value={searchQuery} onChange={(e)=>handleSearch(e.target.value)} />
+
+
+                {isNonVerySmallScreens ? <FlexBetween backgroundColor={neutralLight} borderRadius="2px" gap="1rem" padding="0.2rem 1.8rem" position="relative">
+                    <Box position="relative">
+                        <InputBase placeholder="Search...." value={searchQuery} onChange={(e) => handleSearch(e.target.value)} />
+                        {searchQuery && (
+                            <Box
+                                position="absolute"
+                                top="100%"
+                                left="-1.8rem"
+                                width="160%"
+                                bgcolor="white"
+                                borderRadius="4px"
+                                boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+                                zIndex="1000" // Adjust as needed
+                                py="8px" // Adjust the vertical padding
+                                maxHeight="200px" // Adjust the maximum height if needed
+                                overflow="auto" // Add scrollbar if content exceeds the maximum height
+                                sx={{
+                                    backgroundColor: neutralLight,
+                                    "& .MuiSvgIcon-root": {
+                                        pr: "0.25 rem",
+                                        width: "10rem"
+                                    },
+                                    "& .MuiSelect-select:focus": {
+                                        backgroundColor: neutralLight
+                                    },
+                                }}
+                            >
+
+                                <FormControl
+                                    sx={{
+                                        backgroundColor: neutralLight,
+                                        width: "100%",
+                                        borderRadius: "0.25rem",
+                                        p: "0.25rem 1rem",
+                                        "& .MuiSvgIcon-root": {
+                                            pr: "0.25 rem",
+                                            width: "3rem"
+                                        },
+                                        "& .MuiSelect-select:focus": {
+                                            backgroundColor: neutralLight
+                                        }
+                                    }}
+                                >
+                                    {data.filter(item => {
+                                        const fullName = `${item.firstName} ${item.lastName}`;
+                                        return new RegExp(`^${searchQuery}`, 'i').test(fullName);
+                                    }).map((item) => (
+                                        <MenuItem key={item._id} onClick={() => navigate(`/profile/${item._id}`)}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+                                    ))}
+                                </FormControl>
+
+                            </Box>
+                        )}
+                    </Box>
                     <IconButton>
                         <Search />
                     </IconButton>
-                </FlexBetween>
-                )}
+                </FlexBetween> :
+                    <FlexBetween backgroundColor={neutralLight} borderRadius="2px" gap="1rem" padding="0.2rem 1.8rem" position="relative">
+                        <Box position="relative">
+                            <InputBase placeholder="Search...." value={searchQuery} onChange={(e) => handleSearch(e.target.value)} />
+                            {searchQuery && (
+                                <Box
+                                    position="absolute"
+                                    top="130%"
+                                    left="-4rem"
+                                    width="600%"
+                                    bgcolor="white"
+                                    borderRadius="4px"
+                                    boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+                                    zIndex="100" // Adjust as needed
+                                    py="8px" // Adjust the vertical padding
+                                    maxHeight="200px" // Adjust the maximum height if needed
+                                    overflow="auto" // Add scrollbar if content exceeds the maximum height
+                                    sx={{
+                                        backgroundColor: neutralLight,
+                                        "& .MuiSvgIcon-root": {
+                                            pr: "0.25 rem",
+                                            width: "10rem"
+                                        },
+                                        "& .MuiSelect-select:focus": {
+                                            backgroundColor: neutralLight
+                                        },
+                                    }}
+                                >
+                                    <FormControl
+                                        sx={{
+                                            backgroundColor: neutralLight,
+                                            width: "100%",
+                                            borderRadius: "0.25rem",
+                                            p: "0.25rem 1rem",
+                                            "& .MuiSvgIcon-root": {
+                                                pr: "0.25 rem",
+                                                width: "3rem"
+                                            },
+                                            "& .MuiSelect-select:focus": {
+                                                backgroundColor: neutralLight
+                                            }
+                                        }}
+                                    >
+                                        {data.filter(item => {
+                                            const fullName = `${item.firstName} ${item.lastName}`;
+                                            return new RegExp(`^${searchQuery}`, 'i').test(fullName);
+                                        }).map((item) => (
+                                            <MenuItem key={item._id} onClick={() => navigate(`/profile/${item._id}`)}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+                                        ))}
+                                    </FormControl>
+                                </Box>
+                            )}
+                        </Box>
+                        <IconButton>
+                            <Search />
+                        </IconButton>
+                    </FlexBetween>
+                }
+
+
             </FlexBetween>
 
             {/*Desktop Nav */}
@@ -121,7 +234,7 @@ const Navbar = () => {
                             borderRadius: "10px",
                         }}
                     >
-                        <CalendarMonth sx={{ fontSize: "25px" }} />
+                        <CalendarMonth sx={{ fontSize: "25px", color: primary  }} />
                         <Typography>Scheduler</Typography>
                     </IconButton>
                     <Notifications sx={{ fontSize: "25px" }} />
@@ -164,7 +277,7 @@ const Navbar = () => {
                     right="0"
                     bottom="0"
                     height="100%"
-                    zIndex="10"
+                    zIndex="110"
                     maxWidth="500px"
                     minWidth="300px"
                     backgroundColor={background}
@@ -181,22 +294,22 @@ const Navbar = () => {
                         <IconButton onClick={() => dispatch(setMode())}>
                             {theme.palette.mode === 'dark' ? (
                                 <DarkMode sx={{ fontSize: "25px" }} />
-                                
+
                             ) : (
                                 <DarkMode sx={{ color: dark, fontSize: "25px" }} />
                             )}
                             <Typography>Mode</Typography>
                         </IconButton>
                         <IconButton
-                        onClick={() => navigate("/calendar")}
-                        sx={{
-                            position: 'relative',
-                            borderRadius: "10px",
-                        }}
-                    >
-                        <CalendarMonth sx={{ fontSize: "25px" }} />
-                        <Typography>Scheduler</Typography>
-                    </IconButton>
+                            onClick={() => navigate("/calendar")}
+                            sx={{
+                                position: 'relative',
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <CalendarMonth sx={{ fontSize: "25px" }} />
+                            <Typography>Scheduler</Typography>
+                        </IconButton>
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
                         <FormControl variant="standard" value={fullName}>
