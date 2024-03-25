@@ -6,6 +6,7 @@ import {
     ImageOutlined,
     MicOutlined,
     MoreHorizOutlined,
+    ThumbUpTwoTone
 } from "@mui/icons-material";
 
 import {

@@ -33,11 +33,6 @@ const MyProfile = () => {
 
                     <PostsWidget userId={_id} isProfile={true}/>
                 </Box>
-                {isNonMobileScreens &&
-                    (<Box flexBasis="26%">
-                        <AdvertWidget />
-                        <Box m="2rem 0"/>
-                    </Box>)}
             </Box>
         </Box>
     )

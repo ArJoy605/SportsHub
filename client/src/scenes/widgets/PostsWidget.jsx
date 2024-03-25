@@ -14,9 +14,11 @@ const PostsWidget = ({ userId, isProfile}) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+    // Sort posts by timestamp in descending order
+    const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    dispatch(setPosts({ posts: sortedPosts }));
   };
-
+  
   const getUserPosts = async () => {
     const response = await fetch(
       `http://27.54.151.248:3001/posts/${userId}/posts`,
@@ -26,8 +28,13 @@ const PostsWidget = ({ userId, isProfile}) => {
       }
     );
     const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+    // Sort user posts by timestamp in descending order
+    const sortedUserPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    console.log(sortedUserPosts);
+    dispatch(setPosts({ posts: sortedUserPosts }));
   };
+  
 
   useEffect(() => {
     if (isProfile) {

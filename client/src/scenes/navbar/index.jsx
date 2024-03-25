@@ -23,7 +23,10 @@ import {
     Notifications,
     Help,
     Menu,
-    Close
+    Close,
+    AdminPanelSettingsTwoTone,
+    SensorOccupiedTwoTone,
+    EmojiEventsTwoTone
 } from "@mui/icons-material";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -318,6 +321,37 @@ const Navbar = () => {
                         >
                             <CalendarMonth sx={{ fontSize: "25px" }} />
                             <Typography>Scheduler</Typography>
+                        </IconButton>
+                        <IconButton
+                            onClick={() => navigate("/myprofile")}
+                            sx={{
+                                position: 'relative',
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <AdminPanelSettingsTwoTone sx={{ fontSize: "25px" }} />
+                            <Typography>My Profile</Typography>
+                        </IconButton>
+                        <IconButton
+                            onClick={() => navigate("/connections")}
+                            sx={{
+                                position: 'relative',
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <SensorOccupiedTwoTone sx={{ fontSize: "25px" }} />
+                            <Typography>Connections</Typography>
+                        </IconButton>
+
+                        <IconButton
+                            onClick={() => navigate("/latestevents")}
+                            sx={{
+                                position: 'relative',
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <EmojiEventsTwoTone sx={{ fontSize: "25px" }} />
+                            <Typography>Latest Events</Typography>
                         </IconButton>
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
