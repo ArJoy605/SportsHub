@@ -8,12 +8,13 @@ import {
     MenuItem,
     FormControl,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    ListItem
 } from "@mui/material";
 
 import {
     Search,
-    Message,
+    CalendarMonth,
     DarkMode,
     LightMode,
     Notifications,
@@ -35,6 +36,7 @@ const Navbar = () => {
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const [searchQuery, setSearchQuery] = useState('');
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
@@ -45,11 +47,33 @@ const Navbar = () => {
 
     const fullName = `${user.firstName} ${user.lastName}`;
 
+    const fetchData = (value) =>{
+        fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((json) =>{
+            const results = json.filter((user)=>{
+                return value && user && user.name && user.name.toLowerCase().includes(value);
+            });
+            console.log(results);
+        });
+    };
+
+    const handleSearch =  (value) => {
+        setSearchQuery(value);
+        fetchData(value);
+
+
+        // // Fetch suggestions from the server
+        // const response = await fetch(`/api/users/search?query=${query}`);
+        // const data = await response.json();
+        // setSuggestions(data.suggestions);
+    };
+
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
             <FlexBetween gap="1.75rem">
-                <Typography
+                {isNonMobileScreens ? (<Typography
                     fontWeight="bold" fontSize="clamp(1rem, 2rem, 2.25rem)" color="primary"
                     onClick={() => navigate("/home")}
                     sx={{
@@ -59,14 +83,24 @@ const Navbar = () => {
                         },
                     }} >
                     SportsHUB
-                </Typography>
-                {isNonMobileScreens && (
-                    <FlexBetween backgroundColor={neutralLight} borderRadius="9px" gap="3rem" padding="0.1rem 1.5rem">
-                        <InputBase placeholder="Search...." />
-                        <IconButton>
-                            <Search />
-                        </IconButton>
-                    </FlexBetween>
+                </Typography>) : <Typography
+                    fontWeight="bold" fontSize="clamp(.8rem, 2rem, 1.7rem)" color="primary"
+                    onClick={() => navigate("/home")}
+                    sx={{
+                        "&:hover": {
+                            color: primaryLight,
+                            cursor: "pointer",
+                        },
+                    }} >
+                    SportsHUB
+                </Typography>}
+                {(
+                    <FlexBetween backgroundColor={neutralLight} borderRadius="20px" gap="1rem" padding="0.2rem 1.8rem">
+                    <InputBase placeholder="Search...." value={searchQuery} onChange={(e)=>handleSearch(e.target.value)} />
+                    <IconButton>
+                        <Search />
+                    </IconButton>
+                </FlexBetween>
                 )}
             </FlexBetween>
 
@@ -80,7 +114,16 @@ const Navbar = () => {
                             <DarkMode sx={{ color: dark, fontSize: "25px" }} />
                         )}
                     </IconButton>
-                    <Message sx={{ fontSize: "25px" }} />
+                    <IconButton
+                        onClick={() => navigate("/calendar")}
+                        sx={{
+                            position: 'relative',
+                            borderRadius: "10px",
+                        }}
+                    >
+                        <CalendarMonth sx={{ fontSize: "25px" }} />
+                        <Typography>Scheduler</Typography>
+                    </IconButton>
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />
                     <FormControl variant="standard" value={fullName}>
@@ -138,11 +181,22 @@ const Navbar = () => {
                         <IconButton onClick={() => dispatch(setMode())}>
                             {theme.palette.mode === 'dark' ? (
                                 <DarkMode sx={{ fontSize: "25px" }} />
+                                
                             ) : (
                                 <DarkMode sx={{ color: dark, fontSize: "25px" }} />
                             )}
+                            <Typography>Mode</Typography>
                         </IconButton>
-                        <Message sx={{ fontSize: "25px" }} />
+                        <IconButton
+                        onClick={() => navigate("/calendar")}
+                        sx={{
+                            position: 'relative',
+                            borderRadius: "10px",
+                        }}
+                    >
+                        <CalendarMonth sx={{ fontSize: "25px" }} />
+                        <Typography>Scheduler</Typography>
+                    </IconButton>
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
                         <FormControl variant="standard" value={fullName}>
