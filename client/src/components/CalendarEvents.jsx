@@ -45,10 +45,11 @@ const CalendarEvents = () => {
       start: moment(event.start).toDate(),
       end: moment(event.end).toDate(),
       title: event.title,
-      color: "#1fc467"
+      color: event.color
     });
-
   }
+
+
 
   const onEventUpdated = async (updatedEvent) => {
     setEvents(prevEvents => {
@@ -102,7 +103,9 @@ const CalendarEvents = () => {
   const fetchEventsReq = async () => {
     try {
       const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-eventsreq");
-      setEventsReq(response.data);
+      const data = response.data;
+      const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setEventsReq(sortedData);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
@@ -138,6 +141,7 @@ const CalendarEvents = () => {
 
 
   const handleEventAdd = async (data) => {
+    console.log(data.event);
     axios.post("http://27.54.151.248:3001/api/calendar/create-event", data.event);
   };
 
@@ -154,8 +158,11 @@ const CalendarEvents = () => {
       {seeEvents && <WidgetWrapper>
         <Typography variant="h4" align="center">Events</Typography>
         {events.map(event => (
-          <Events key={event._id} title={event.title} eventStart={event.start} eventEnd={event.end} />
-
+          <Events key={event._id} 
+          title={event.title} 
+          eventStart={event.start} 
+          eventEnd={event.end} 
+          />
         ))}
       </WidgetWrapper>}
 
@@ -164,12 +171,14 @@ const CalendarEvents = () => {
         {eventsReq.map(event => (
           <EventsReq
             key={event._id}
+            eventId={event._id}
             title={event.title}
             eventStart={event.start}
             eventEnd={event.end}
-            description={event.description}
+            eventDescription={event.description}
             location={event.location}
-            status={event.status}
+            eventStatus={event.status}
+            onEventAdded={(e) => onEventAdded(e)}
           />
 
         ))}
@@ -225,7 +234,7 @@ const CalendarEvents = () => {
 
 
 
-          <Button
+          {user.isDept && <><Button
             variant="contained"
             style={{
               backgroundColor: theme.palette.secondary.main, // Different color
@@ -237,7 +246,7 @@ const CalendarEvents = () => {
             onClick={() => setReqModalOpen(true)}
           >
             Request an Event
-          </Button>
+          </Button></>}
 
           <Button
             variant="contained"
@@ -260,7 +269,6 @@ const CalendarEvents = () => {
             events={events}
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
-            eventAdd={(event) => handleEventAdd(event)}
             datesSet={(date) => handleDatesSet(date)}
             editable={true}
             eventClick={(data) => handleEventClick(data)}

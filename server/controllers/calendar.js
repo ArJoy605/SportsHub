@@ -52,6 +52,19 @@ router.get("/get-events", async (req, res) => {
     res.status(200).send(events);
 });
 
+router.get("/get-event/:id", async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const event = await Event.findById(eventId);
+        res.status(200).send(event);
+    }
+    catch (error) {
+        console.error("Error fetching event:", error);
+        res.status(500).send({ error: "Internal server error" });
+    }
+
+});
+
 router.get("/get-eventsreq", async (req, res) => {
     try {
         const events = await EventReq.find();
@@ -59,6 +72,26 @@ router.get("/get-eventsreq", async (req, res) => {
     } catch (error) {
         console.error("Error fetching events:", error);
         res.status(500).send({ error: "Internal server error" });
+    }
+});
+
+router.put("/update-eventreq/:eventId", async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const updatedEventData = req.body;
+
+        // Find the event by ID and update its data
+        const updatedEvent = await EventReq.findByIdAndUpdate(eventId, updatedEventData, { new: true });
+
+        if (!updatedEvent) {
+            return res.status(404).send("Event not found");
+        }
+
+        res.status(200).send("Event updated successfully");
+    } catch (error) {
+        // If an error occurs during the update process, send a 500 (Internal Server Error) response
+        console.error("Error updating event:", error);
+        res.status(500).send("Internal Server Error");
     }
 });
 

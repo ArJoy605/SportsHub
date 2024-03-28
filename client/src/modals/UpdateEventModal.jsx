@@ -187,7 +187,7 @@ import Modal from "react-modal";
 import Datetime from "react-datetime";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { TextField, MenuItem, Select } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
@@ -234,6 +234,8 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
     const [title, setTitle] = useState("");
     const [start, setStart] = useState(new Date());
     const [end, setEnd] = useState(new Date());
+    const [location, setLocation] = useState(0);
+    const [color, setColor] = useState("");
     const theme = useTheme(); // Access the current theme
 
     useEffect(() => {
@@ -241,18 +243,35 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
             setTitle(event.event.title || "");
             setStart(new Date(event.event.start) || new Date());
             setEnd(new Date(event.event.end) || new Date());
+            getEvent(eventID);
         }
     }, [event]);
 
+    const getEvent = async (eventID) => {
+        const res = await axios.get(`http://27.54.151.248:3001/api/calendar/get-event/${eventID}`)
+        setLocation(res.data.location);
+    }
     const onSubmit = async (event) => {
         event.preventDefault();
+        let x;
+        if (location === 0) {
+            x = "#42FF74";
+        }
+        else if (location === 1) {
+            x = "#FFAE42";
+        }
+        else {
+            x = "#9543FF"
+        }
 
         try {
             const updatedEvent = {
                 ...event.event,
                 title,
                 start,
-                end
+                end,
+                location,
+                color: x,
             };
 
             await axios.put(`http://27.54.151.248:3001/api/calendar/update-event/${eventID}`, updatedEvent);
@@ -279,6 +298,7 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    required
                 />
                 <StyledDatetimeContainer>
                     <label>Start Date</label>
@@ -295,6 +315,19 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
                         onChange={(date) => setEnd(date)}
                         inputProps={{ style: { border: "1px solid #ccc", borderRadius: "4px", padding: "8px", fontSize: "16px" } }}
                     />
+                </StyledDatetimeContainer>
+                <StyledDatetimeContainer theme={theme}>
+                    <label>Location</label>
+                    <Select
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        label="Location"
+                        variant="outlined"
+                    >
+                        <MenuItem value={0}>Central Field</MenuItem>
+                        <MenuItem value={1}>Handball Ground</MenuItem>
+                        <MenuItem value={2}>Basketball Ground</MenuItem>
+                    </Select>
                 </StyledDatetimeContainer>
                 <Button variant="contained" type="submit" style={{ backgroundColor: theme.palette.primary.main, color: "#FFF" }}>
                     Update Event

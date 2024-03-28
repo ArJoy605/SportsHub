@@ -46,12 +46,16 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import Datetime from "react-datetime";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import CloseIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
+import moment from "moment";
 
 const StyledModal = styled(Modal)`
   display: flex;
@@ -97,13 +101,37 @@ const AddEventModal = ({ isOpen, onEventAdded, onClose }) => {
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
+  const [color, setColor] = useState("");
+  const [location, setLocation] = useState("");
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    let x;
+    if (location === 0) {
+      x = "#42FF74";
+    }
+    else if (location === 1) {
+      x = "#FFAE42";
+    }
+    else {
+      x = "#9543FF"
+    }
+
+    const newEvent = {
+      title,
+      start: moment(start).toDate(),
+      end: moment(end).toDate(),
+      location,
+      color: x
+    };
+
+    await axios.post("http://27.54.151.248:3001/api/calendar/create-event", newEvent);
     onEventAdded({
       title,
       start,
       end,
+      location,
+      color: x
     });
     onClose();
   };
@@ -119,6 +147,7 @@ const AddEventModal = ({ isOpen, onEventAdded, onClose }) => {
           variant="outlined"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
         <StyledDatetimeContainer theme={theme}>
           <label>Start Date</label>
@@ -135,6 +164,19 @@ const AddEventModal = ({ isOpen, onEventAdded, onClose }) => {
             onChange={(date) => setEnd(date)}
             inputProps={{ style: { border: "1px solid #ccc", borderRadius: "4px", padding: "8px", fontSize: "16px" } }}
           />
+        </StyledDatetimeContainer>
+        <StyledDatetimeContainer theme={theme}>
+          <label>Location</label>
+          <Select
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            label="Location"
+            variant="outlined"
+          >
+            <MenuItem value={0}>Central Field</MenuItem>
+            <MenuItem value={1}>Handball Ground</MenuItem>
+            <MenuItem value={2}>Basketball Ground</MenuItem>
+          </Select>
         </StyledDatetimeContainer>
         <Button variant="contained" type="submit" style={{ backgroundColor: theme.palette.primary.main, color: "#FFF" }}>
           Add Event
