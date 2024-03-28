@@ -22,6 +22,7 @@
 // export default router;
 
 import Event from "../models/Events.js";
+import EventReq from "../models/EventsReq.js";
 import moment from "moment";
 import express from "express";
 
@@ -34,6 +35,12 @@ router.post("/create-event", async (req, res) => {
     res.status(201).send("Event created successfully");
 });
 
+router.post("/req-event", async (req, res) => {
+    const event = EventReq(req.body);
+    await event.save();
+    res.status(201).send("Event Requested successfully");
+});
+
 
 // Get events
 router.get("/get-events", async (req, res) => {
@@ -43,6 +50,16 @@ router.get("/get-events", async (req, res) => {
     });
 
     res.status(200).send(events);
+});
+
+router.get("/get-eventsreq", async (req, res) => {
+    try {
+        const events = await EventReq.find();
+        res.status(200).send(events);
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        res.status(500).send({ error: "Internal server error" });
+    }
 });
 
 

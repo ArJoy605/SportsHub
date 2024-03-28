@@ -37,6 +37,14 @@ const UserSchema = new mongoose.Schema(
         occupation: String,
         viewedProfile: Number,
         impressions: Number,
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
+        isDept: {
+            type: Boolean,
+            default: false,
+        },
     }, {
     timestamps: true
 }

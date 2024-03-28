@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const EventSchema = mongoose.Schema({
     start: Date,
     end: Date,
-    title: String
+    title: String,
 });
 
 const Event = mongoose.model("Event", EventSchema);
