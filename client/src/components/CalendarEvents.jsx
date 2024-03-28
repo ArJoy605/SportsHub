@@ -45,6 +45,7 @@ const CalendarEvents = () => {
       start: moment(event.start).toDate(),
       end: moment(event.end).toDate(),
       title: event.title,
+      color: "#1fc467"
     });
 
   }
