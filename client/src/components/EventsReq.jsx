@@ -64,6 +64,22 @@ const EventsReq = ({eventId, title, eventStart, eventEnd, eventDescription, loca
         }
     };
 
+
+    const getLocationColor = (location) =>{
+        let x;
+        if (location === 0) {
+            x = "#42FF74";
+        }
+        else if (location === 1) {
+            x = "#FFAE42";
+        }
+        else {
+            x = "#9543FF"
+        }
+
+        return x;
+    }
+
     const confirmAccept = async () => {
         await handleApprove();
     }
@@ -177,7 +193,7 @@ const EventsReq = ({eventId, title, eventStart, eventEnd, eventDescription, loca
                         </Box>
                         {status==2 && <Box display="flex" alignItems="center">
                             <Typography variant="h6" sx={{ color: "#FFC107" }}>
-                                <strong>Description:</strong>
+                                <strong>Reason:</strong>
                             </Typography>
                             <Typography variant="h6" sx={{ color: "#FFC107" }}>
                                 {description}

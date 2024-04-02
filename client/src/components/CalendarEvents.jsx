@@ -7,13 +7,14 @@ import ReqEventModal from "@/modals/ReqEventModal";
 import EventsReq from "./EventsReq";
 import moment from "moment";
 import axios from "axios";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Box, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import styled from "@emotion/styled";
 import Events from "./Events";
 import WidgetWrapper from "./WidgetWrapper";
 import { set } from "date-fns";
+import EventWidget from "@/scenes/widgets/EventWidget";
 
 
 
@@ -30,6 +31,7 @@ const CalendarEvents = () => {
   const theme = useTheme();
   const [seeEvents, setSeeEvents] = useState(false);
   const [seeReqEvents, setSeeReqEvents] = useState(false);
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
 
   useEffect(() => {
@@ -152,21 +154,40 @@ const CalendarEvents = () => {
 
 
 
+  const itemsPerPage = 6;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalEventPages = Math.ceil(eventsReq.length / itemsPerPage);
+
+  const paginatedEvents = eventsReq.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+
+
 
   return (
     <>
       {seeEvents && <WidgetWrapper>
         <Typography variant="h4" align="center">Events</Typography>
         {events.map(event => (
-          <Events key={event._id} 
-          title={event.title} 
-          eventStart={event.start} 
-          eventEnd={event.end} 
+          <Events key={event._id}
+            title={event.title}
+            eventStart={event.start}
+            eventEnd={event.end}
           />
         ))}
       </WidgetWrapper>}
 
-      {seeReqEvents && <WidgetWrapper>
+      {/* {seeReqEvents && <WidgetWrapper>
         <Typography variant="h4" align="center">Events</Typography>
         {eventsReq.map(event => (
           <EventsReq
@@ -182,7 +203,73 @@ const CalendarEvents = () => {
           />
 
         ))}
-      </WidgetWrapper>}
+      </WidgetWrapper>} */}
+
+      {seeReqEvents && (!isNonMobileScreens ? <>
+        <Typography variant="h4" align="center">Events Requested</Typography>
+        {paginatedEvents.map(event => (
+          <Box
+            key={event._id}
+            width="100%"
+            padding="2rem 6%"
+            display={isNonMobileScreens ? "flex" : "block"}
+            gap=".5rem"
+            justifyContent="space-between"
+          >
+            <EventWidget
+              eventId={event._id}
+              title={event.title}
+              eventDescription={event.description}
+              eventStart={event.start}
+              eventEnd={event.end}
+              location={event.location}
+              onEventAdded={(e) => onEventAdded(e)}
+              eventStatus={event.status}
+            />
+          </Box>
+        ))}
+        <Box display="flex" justifyContent="center" marginTop="1rem">
+          <Button disabled={currentPage === 1} onClick={handlePrevPage}>Previous</Button>
+          <Typography variant="body1" component="span" style={{ margin: '0 1rem' }}>{currentPage} of {totalEventPages}</Typography>
+          <Button disabled={currentPage === totalEventPages} onClick={handleNextPage}>Next</Button>
+        </Box>
+      </> :
+        (
+          <>
+            <Typography variant="h4" align="center">Events Requested</Typography>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+              {paginatedEvents.map((event, index) => (
+                <Box
+                  key={event._id}
+                  width="calc(50% - 0.5rem)"
+                  padding="1rem 0%"
+                  marginBottom="1rem"
+                  display="flex"
+                  gap=".5rem"
+                  flexDirection={isNonMobileScreens ? 'row' : 'column'}
+                >
+                  <EventWidget
+                    eventId={event._id}
+                    title={event.title}
+                    eventDescription={event.description}
+                    eventStart={event.start}
+                    eventEnd={event.end}
+                    location={event.location}
+                    onEventAdded={(e) => onEventAdded(e)}
+                    eventStatus={event.status}
+                  />
+                </Box>
+              ))}
+            </div>
+            <Box display="flex" justifyContent="center" marginTop="1rem" pb="1.1rem">
+              <Button disabled={currentPage === 1} onClick={handlePrevPage}>Previous</Button>
+              <Typography variant="body1" component="span" style={{ margin: '0 1rem' }}>{currentPage} of {totalEventPages}</Typography>
+              <Button disabled={currentPage === totalEventPages} onClick={handleNextPage}>Next</Button>
+            </Box>
+          </>
+        ))
+
+      }
       <WidgetWrapper p={2} display="flex" flexDirection="column" > {/* Adjust padding as needed */}
 
 
@@ -264,17 +351,30 @@ const CalendarEvents = () => {
         </Box>
 
         <div style={{ position: "relative", zIndex: 0, height: "100vh" }}>
-          <Calendar
-            ref={calendarRef}
-            events={events}
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            datesSet={(date) => handleDatesSet(date)}
-            editable={true}
-            eventClick={(data) => handleEventClick(data)}
-            
-          />
-        </div>
+      <Box display="flex" justifyContent="center" mb={2} flexDirection="row">
+        <Box display="flex" alignItems="center" mr={1}>
+          <Box width={20} height={20} bgcolor="#42FF74" mr={1}></Box>
+          <span>Central Field</span>
+        </Box>
+        <Box display="flex" alignItems="center" mr={1}>
+          <Box width={20} height={20} bgcolor="#FFAE42" mr={1}></Box>
+          <span>Handball Ground</span>
+        </Box>
+        <Box display="flex" alignItems="center">
+          <Box width={20} height={20} bgcolor="#9543FF" mr={1}></Box>
+          <span>Basketball Ground</span>
+        </Box>
+      </Box>
+      <Calendar
+        ref={calendarRef}
+        events={events}
+        plugins={[dayGridPlugin]}
+        initialView="dayGridMonth"
+        datesSet={(date) => handleDatesSet(date)}
+        editable={true}
+        eventClick={(data) => handleEventClick(data)}
+      />
+    </div>
 
         <Box mt={2}></Box>
         <AddEventModal isOpen={addModalOpen} onClose={() => setAddModalOpen(false)}

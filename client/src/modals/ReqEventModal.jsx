@@ -92,6 +92,7 @@ const ReqEventModal = ({ isOpen, onClose }) => {
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    required
                 />
                 <StyledDatetimeContainer theme={theme}>
                     <label>Start Date</label>
