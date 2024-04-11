@@ -12,6 +12,7 @@ import {register} from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
+import tournamentRoutes from "./routes/tournament.js";
 import { verifyToken } from './midldeware/auth.js';
 import {createPost} from "./controllers/posts.js";
 import User from "./models/User.js";
@@ -60,6 +61,7 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/api/calendar",calendarRoutes);
+app.use("/tournament", tournamentRoutes);
 
 
 /*MONGOOSE SETUP*/

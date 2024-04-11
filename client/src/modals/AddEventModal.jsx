@@ -125,7 +125,7 @@ const AddEventModal = ({ isOpen, onEventAdded, onClose }) => {
       color: x
     };
 
-    await axios.post("http://27.54.151.248:3001/api/calendar/create-event", newEvent);
+    await axios.post("http://localhost:3001/api/calendar/create-event", newEvent);
     onEventAdded({
       title,
       start,

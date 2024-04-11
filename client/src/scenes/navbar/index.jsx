@@ -26,7 +26,7 @@ import {
     Close,
     AdminPanelSettingsTwoTone,
     SensorOccupiedTwoTone,
-    EmojiEventsTwoTone
+    EmojiEventsTwoTone,
 } from "@mui/icons-material";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -57,7 +57,7 @@ const Navbar = () => {
     const fullName = `${user.firstName} ${user.lastName}`;
 
     const fetchData = async (value) => {
-        const response = await axios.get(`http://27.54.151.248:3001/users/getusers/${value}`);
+        const response = await axios.get(`http://localhost:3001/users/getusers/${value}`);
         const data = await response.data;
         setdata(data);
 
@@ -248,6 +248,16 @@ const Navbar = () => {
                     >
                         <CalendarMonth sx={{ fontSize: "25px", color: primary  }} />
                         <Typography>Scheduler</Typography>
+                    </IconButton>
+                    <IconButton
+                        onClick={() => navigate("/tournament")}
+                        sx={{
+                            position: 'relative',
+                            borderRadius: "10px",
+                        }}
+                    >
+                        <EmojiEventsTwoTone sx={{ fontSize: "25px", color: primary }} />
+                        <Typography>Tournament</Typography>
                     </IconButton>
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />

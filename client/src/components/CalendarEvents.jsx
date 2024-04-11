@@ -85,7 +85,7 @@ const CalendarEvents = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-events", {
+      const response = await axios.get("http://localhost:3001/api/calendar/get-events", {
         params: {
           start: moment().startOf('month').toISOString(), // Adjust as needed
           end: moment().endOf('month').toISOString() // Adjust as needed
@@ -104,7 +104,7 @@ const CalendarEvents = () => {
 
   const fetchEventsReq = async () => {
     try {
-      const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-eventsreq");
+      const response = await axios.get("http://localhost:3001/api/calendar/get-eventsreq");
       const data = response.data;
       const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setEventsReq(sortedData);
@@ -130,7 +130,7 @@ const CalendarEvents = () => {
   const removeEvent = async (eventId) => {
     try {
       // Send a request to delete the event by its ID
-      await axios.delete(`http://27.54.151.248:3001/api/calendar/delete-event/${eventId}`);
+      await axios.delete(`http://localhost:3001/api/calendar/delete-event/${eventId}`);
       await fetchEvents();
 
     } catch (error) {
@@ -144,11 +144,11 @@ const CalendarEvents = () => {
 
   const handleEventAdd = async (data) => {
     console.log(data.event);
-    axios.post("http://27.54.151.248:3001/api/calendar/create-event", data.event);
+    axios.post("http://localhost:3001/api/calendar/create-event", data.event);
   };
 
   const handleDatesSet = async (data) => {
-    const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-events?start=" + moment(data.start).toISOString() + "&end=" + moment(data.end).toISOString());
+    const response = await axios.get("http://localhost:3001/api/calendar/get-events?start=" + moment(data.start).toISOString() + "&end=" + moment(data.end).toISOString());
     setEvents(response.data);
   }
 
@@ -351,30 +351,30 @@ const CalendarEvents = () => {
         </Box>
 
         <div style={{ position: "relative", zIndex: 0, height: "100vh" }}>
-      <Box display="flex" justifyContent="center" mb={2} flexDirection="row">
-        <Box display="flex" alignItems="center" mr={1}>
-          <Box width={20} height={20} bgcolor="#42FF74" mr={1}></Box>
-          <span>Central Field</span>
-        </Box>
-        <Box display="flex" alignItems="center" mr={1}>
-          <Box width={20} height={20} bgcolor="#FFAE42" mr={1}></Box>
-          <span>Handball Ground</span>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Box width={20} height={20} bgcolor="#9543FF" mr={1}></Box>
-          <span>Basketball Ground</span>
-        </Box>
-      </Box>
-      <Calendar
-        ref={calendarRef}
-        events={events}
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        datesSet={(date) => handleDatesSet(date)}
-        editable={true}
-        eventClick={(data) => handleEventClick(data)}
-      />
-    </div>
+          <Box display="flex" justifyContent="center" mb={2} flexDirection="row">
+            <Box display="flex" alignItems="center" mr={1}>
+              <Box width={20} height={20} bgcolor="#42FF74" mr={1}></Box>
+              <span>Central Field</span>
+            </Box>
+            <Box display="flex" alignItems="center" mr={1}>
+              <Box width={20} height={20} bgcolor="#FFAE42" mr={1}></Box>
+              <span>Handball Ground</span>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Box width={20} height={20} bgcolor="#9543FF" mr={1}></Box>
+              <span>Basketball Ground</span>
+            </Box>
+          </Box>
+          <Calendar
+            ref={calendarRef}
+            events={events}
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            datesSet={(date) => handleDatesSet(date)}
+            editable={true}
+            eventClick={(data) => handleEventClick(data)}
+          />
+        </div>
 
         <Box mt={2}></Box>
         <AddEventModal isOpen={addModalOpen} onClose={() => setAddModalOpen(false)}

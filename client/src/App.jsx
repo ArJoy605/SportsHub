@@ -5,6 +5,7 @@ import ProfilePage from "@/scenes/profilePage";
 import MyProfile from "@/scenes/myProfile";
 import Connections from "@/scenes/connections";
 import LatestEvents from "@/scenes/latestEvents";
+import TournamentPage from "@/scenes/tournamentPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -52,7 +53,11 @@ function App() {
               path="/latestevents"
               element={isAuth?<LatestEvents/>:<Navigate to="/"/>}
             />
-          </Routes>
+            <Route
+              path="/tournament"
+              element={isAuth?<TournamentPage/>:<Navigate to="/"/>} 
+            />
+            </Routes>
         </ThemeProvider>
       </BrowserRouter>
     </div>

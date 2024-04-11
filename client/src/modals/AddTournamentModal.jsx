@@ -51,7 +51,7 @@ const StyledCloseButton = styled(Fab)(({ theme }) => ({
     color: theme.palette.error.contrastText,
 }));
 
-const ReqEventModal = ({ isOpen, onClose }) => {
+const AddTournamentModal = ({ isOpen, onClose, onTournamentAdded}) => {
     const theme = useTheme();
     const [title, setTitle] = useState("");
     const [start, setStart] = useState(new Date());
@@ -70,11 +70,11 @@ const ReqEventModal = ({ isOpen, onClose }) => {
                 end,
                 description,
                 location,
-                reqUserId: user._id,
             };
 
 
-            await axios.post("http://localhost:3001/api/calendar/req-event/", reqEvent);
+            await axios.post("http://localhost:3001/tournament/create-tournament", reqEvent);
+            onTournamentAdded();
             onClose();
         } catch (err) {
             console.error("Error Requesting event: ", err);
@@ -130,11 +130,11 @@ const ReqEventModal = ({ isOpen, onClose }) => {
                     </Select>
                 </StyledDatetimeContainer>
                 <Button variant="contained" type="submit" style={{ backgroundColor: theme.palette.primary.main, color: "#FFF" }}>
-                    Request Event
+                    Add Tournament
                 </Button>
             </StyledForm>
         </StyledModal>
     );
 };
 
-export default ReqEventModal;
+export default AddTournamentModal;

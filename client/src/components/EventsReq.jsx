@@ -111,7 +111,7 @@ const EventsReq = ({eventId, title, eventStart, eventEnd, eventDescription, loca
                 status,
                 color: x
             };
-            await axios.post("http://27.54.151.248:3001/api/calendar/create-event", newEvent);
+            await axios.post("http://localhost:3001/api/calendar/create-event", newEvent);
 
             const updatedEventReq = {
                 title,
@@ -121,7 +121,7 @@ const EventsReq = ({eventId, title, eventStart, eventEnd, eventDescription, loca
                 location,
                 status: 1,
             }
-            await axios.put(`http://27.54.151.248:3001/api/calendar/update-eventreq/${eventId}`, updatedEventReq);
+            await axios.put(`http://localhost:3001/api/calendar/update-eventreq/${eventId}`, updatedEventReq);
             
             onEventAdded({
                 title,
@@ -148,7 +148,7 @@ const EventsReq = ({eventId, title, eventStart, eventEnd, eventDescription, loca
             status: 2,
         }
         console.log("Decline Description: ", declineDescription);
-        await axios.put(`http://27.54.151.248:3001/api/calendar/update-eventreq/${eventId}`, updatedEventReq);
+        await axios.put(`http://localhost:3001/api/calendar/update-eventreq/${eventId}`, updatedEventReq);
     }
 
     return (
