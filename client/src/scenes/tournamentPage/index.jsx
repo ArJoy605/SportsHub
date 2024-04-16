@@ -87,6 +87,7 @@ const tournamentPage = () => {
                             start={tournament.start}
                             end={tournament.end}
                             location = {getLocationLabel(tournament.location)}
+                            maxParticipents={tournament.maxParticipants}
                             onDelete={(e)=>handleDelete(e)}
                         />
                     </Box>

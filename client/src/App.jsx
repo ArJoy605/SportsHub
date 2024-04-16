@@ -6,6 +6,7 @@ import MyProfile from "@/scenes/myProfile";
 import Connections from "@/scenes/connections";
 import LatestEvents from "@/scenes/latestEvents";
 import TournamentPage from "@/scenes/tournamentPage";
+import TournamentRegistrationPage from "@/scenes/tournamentRegistrationPage";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -56,6 +57,10 @@ function App() {
             <Route
               path="/tournament"
               element={isAuth?<TournamentPage/>:<Navigate to="/"/>} 
+            />
+            <Route
+              path="/tournament/registration/:tournamentId"
+              element={isAuth?<TournamentRegistrationPage/>:<Navigate to="/"/>}
             />
             </Routes>
         </ThemeProvider>

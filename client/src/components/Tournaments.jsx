@@ -3,10 +3,14 @@ import WidgetWrapper from "./WidgetWrapper";
 import FlexBetween from "./FlexBetween";
 import DeleteTournamentModal from "@/modals/DeleteTournamentModal";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-const Tournaments = ({ tournamentId, title, start, end, location, onDelete }) => {
 
+const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents, onDelete }) => {
+
+    const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState(false);
+    const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
 
     // Function to convert ISO date string to a more readable format
@@ -67,6 +71,15 @@ const Tournaments = ({ tournamentId, title, start, end, location, onDelete }) =>
 
                         <Box display="flex" alignItems="center">
                             <Typography variant="h6" sx={{ color: "#f50057" }}>
+                                <strong>MaxParticipants: </strong>
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: "#f50057" }}>
+                                {maxParticipents}
+                            </Typography>
+                        </Box>
+
+                        <Box display="flex" alignItems="center">
+                            <Typography variant="h6" sx={{ color: "#f50057" }}>
                                 <strong>Location: </strong>
                             </Typography>
                             <Typography variant="h6" sx={{ color: "#f50057" }}>
@@ -86,6 +99,21 @@ const Tournaments = ({ tournamentId, title, start, end, location, onDelete }) =>
                             onClick={() => setDeleteModal(true)}
                         >
                             Delete
+                        </Button>
+
+
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            style={{
+                                backgroundColor: "green",
+                                color: "#FFF",
+                                marginTop: "10px", // Add margin bottom for spacing between buttons
+                                marginRight: "2%"
+                            }}
+                            onClick={() => navigate(`/tournament/registration/${tournamentId}`)}
+                        >
+                            {alreadyRegistered ? "Register Another" : "Register"}
                         </Button>
                     </FlexBetween>
                 </CardContent>

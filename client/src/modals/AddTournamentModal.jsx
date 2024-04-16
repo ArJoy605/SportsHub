@@ -59,6 +59,7 @@ const AddTournamentModal = ({ isOpen, onClose, onTournamentAdded}) => {
     const user = useSelector((state) => state.user);
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState(0); // Initialize location state with 0
+    const [maxParticipants, setMaxParticipants] = useState(0); // Initialize maxParticipants state with 0
 
     const onSubmit = async (event) => {
         event.preventDefault();
@@ -70,6 +71,7 @@ const AddTournamentModal = ({ isOpen, onClose, onTournamentAdded}) => {
                 end,
                 description,
                 location,
+                maxParticipants,
             };
 
 
@@ -115,6 +117,13 @@ const AddTournamentModal = ({ isOpen, onClose, onTournamentAdded}) => {
                     variant="outlined"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                />
+                <TextField
+                    label="Max Participants"
+                    variant="outlined"
+                    type="number"
+                    value={maxParticipants}
+                    onChange={(e) => setMaxParticipants(e.target.value)}
                 />
                 <StyledDatetimeContainer theme={theme}>
                     <label>Location</label>
