@@ -3,6 +3,7 @@ import WidgetWrapper from "./WidgetWrapper";
 import FlexBetween from "./FlexBetween";
 import DeleteTournamentModal from "@/modals/DeleteTournamentModal";
 import {useState} from "react";
+import { useSelector } from "react-redux";
 import {useNavigate} from "react-router-dom";
 
 
@@ -11,6 +12,7 @@ const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents
     const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState(false);
     const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+    const user = useSelector((state) => state.user);
 
 
     // Function to convert ISO date string to a more readable format
@@ -87,7 +89,7 @@ const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents
                             </Typography>
                         </Box>
 
-                        <Button
+                        {user.isAdmin && <Button
                             variant="contained"
                             type="submit"
                             style={{
@@ -99,10 +101,10 @@ const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents
                             onClick={() => setDeleteModal(true)}
                         >
                             Delete
-                        </Button>
+                        </Button>}
 
 
-                        <Button
+                        {user.isDept && <Button
                             variant="contained"
                             type="submit"
                             style={{
@@ -114,7 +116,7 @@ const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents
                             onClick={() => navigate(`/tournament/registration/${tournamentId}`)}
                         >
                             {alreadyRegistered ? "Register Another" : "Register"}
-                        </Button>
+                        </Button>}
 
                         <Button
                             variant="contained"

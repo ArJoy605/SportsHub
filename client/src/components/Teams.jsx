@@ -8,6 +8,7 @@ import axios from "axios";
 import { saveAs } from "file-saver"; // Import file-saver library
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { useSelector } from "react-redux";
 
 
 const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
@@ -15,6 +16,7 @@ const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
     const navigate = useNavigate();
     const [deleteModal, setDeleteModal] = useState(false);
     const [teamInfo, setTeamInfo] = useState(null);
+    const user = useSelector((state) => state.user);
 
 
 
@@ -148,7 +150,7 @@ const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
 
                         
 
-                        <Button
+                        {user.isAdmin && <Button
                             variant="contained"
                             type="submit"
                             style={{
@@ -160,9 +162,9 @@ const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
                             onClick={() => setDeleteModal(true)}
                         >
                             Delete
-                        </Button>
+                        </Button>}
 
-                        <Button
+                        {user.isAdmin && <Button
                             variant="contained"
                             type="submit"
                             style={{
@@ -174,7 +176,7 @@ const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
                             onClick={getTeamInfo}
                         >
                             Download Info
-                        </Button>
+                        </Button>}
 
 
                         {/* <Button
