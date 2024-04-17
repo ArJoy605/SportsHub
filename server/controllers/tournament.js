@@ -62,12 +62,13 @@ export const getTournamentById = async (req, res) => {
 
 export const createTeam = async (req, res) => {
     try{
-        const { whoRegistered, tournamentId, teamName, teamMembers } = req.body;
+        const { whoRegistered, tournamentId, teamName, deptName, teamMembers } = req.body;
         const newTeam = new Team({
             whoRegistered,
             tournamentId,
             teamName,
-            teamMembers
+            teamMembers,
+            deptName
         });
         await newTeam.save();
         res.status(201).json(newTeam);
@@ -97,5 +98,27 @@ export const getTeamById = async (req, res) => {
     }
     catch(err){
         res.status(500).json({ message: err.message });
+    }
+}
+
+export const getTeamsByTournamentId = async (req, res) => {
+    try {
+        const tournamentId = req.params.id;
+        const teams = await Team.find({ tournamentId: tournamentId });
+        
+        res.status(200).json(teams);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const deleteTeam = async (req, res) => {
+    const id = req.params.id;
+    try{
+        await Team.findByIdAndDelete(id);
+        res.json({ message: "Team deleted successfully" });   
+    }catch(err){
+        res.status(409).json({ message: err.message });
     }
 }

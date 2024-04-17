@@ -115,6 +115,20 @@ const Tournaments = ({ tournamentId, title, start, end, location,maxParticipents
                         >
                             {alreadyRegistered ? "Register Another" : "Register"}
                         </Button>
+
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            style={{
+                                backgroundColor: "blue",
+                                color: "#FFF",
+                                marginTop: "10px", // Add margin bottom for spacing between buttons
+                                marginRight: "2%"
+                            }}
+                            onClick={() => navigate(`/tournament/teams/${tournamentId}`)}
+                        >
+                            Registered Teams
+                        </Button>
                     </FlexBetween>
                 </CardContent>
             </Card>

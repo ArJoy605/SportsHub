@@ -14,6 +14,9 @@ const TeamSchema = mongoose.Schema({
       teamName: {
         type: String,
       },
+      deptName: {
+        type: String,
+      },
 },
 {
     timestamps: true

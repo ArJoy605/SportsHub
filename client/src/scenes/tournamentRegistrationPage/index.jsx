@@ -15,6 +15,7 @@ const TournamentRegistrationPage = () => {
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
     const [title, setTitle] = useState("");
+    const [deptName, setDeptName] = useState(""); // New state for department name
     const [teamName, setTeamName] = useState(""); // New state for team name
     const [maxParticipants, setMaxParticipants] = useState(null);
     const [playerInfo, setPlayerInfo] = useState([]);
@@ -53,7 +54,7 @@ const TournamentRegistrationPage = () => {
         e.preventDefault();
         try {
             await createTeam();
-            
+
             // Show a registered message
             alert("Registration successful! Check your email for further details.");
             // Navigate to the tournament page
@@ -70,6 +71,7 @@ const TournamentRegistrationPage = () => {
                 whoRegistered: user._id,
                 teamName,
                 tournamentId,
+                deptName, 
                 teamMembers: playerInfo
             });
             console.log(response.data);
@@ -86,18 +88,32 @@ const TournamentRegistrationPage = () => {
                     Register for Tournament: {title}
                 </Typography>
                 {/* Add team name input field */}
-                
+
                 <form onSubmit={handleSubmit}>
+                    <Box>
                     <TextField
-                    label="Team Name"
-                    value={teamName}
-                    onChange={handleTeamNameChange}
-                    variant="outlined"
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={{ width: '50%' }} // Set the width to 50% and left margin to 10%
-                />
+                        label="Team Name"
+                        value={teamName}
+                        onChange={handleTeamNameChange}
+                        variant="outlined"
+                        fullWidth
+                        required
+                        margin="normal"
+                        sx={{ width: '50%' }} // Set the width to 50% and left margin to 10%
+                    />
+                    </Box>
+                    <Box>
+                    <TextField
+                        label="Dept. Name(Shortly)"
+                        value={deptName}
+                        onChange={(e)=>setDeptName(e.target.value)}
+                        variant="outlined"
+                        fullWidth
+                        required
+                        margin="normal"
+                        sx={{ width: '50%' }} // Set the width to 50% and left margin to 10%
+                    />
+                    </Box>
                     {[...Array(maxParticipants)].map((_, index) => (
                         <div key={index} style={{ display: "flex", alignItems: "center" }}>
                             <Box style={{ width: "50%", marginLeft: "10%" }}>
