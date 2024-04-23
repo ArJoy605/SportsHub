@@ -75,7 +75,7 @@ const AddTournamentModal = ({ isOpen, onClose, onTournamentAdded}) => {
             };
 
 
-            await axios.post("http://localhost:3001/tournament/create-tournament", reqEvent);
+            await axios.post("http://27.54.151.248:3001/tournament/create-tournament", reqEvent);
             onTournamentAdded();
             onClose();
         } catch (err) {

@@ -27,7 +27,7 @@ const tournamentTeamPage = () => {
     const fetchTeams = async () => {
         try {
             await fetchTournament();
-            const response = await axios.get(`http://localhost:3001/tournament/get-teams-by-tournament/${tournamentId}`);
+            const response = await axios.get(`http://27.54.151.248:3001/tournament/get-teams-by-tournament/${tournamentId}`);
             const data = response.data;
             const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setTeams(sortedData);
@@ -39,7 +39,7 @@ const tournamentTeamPage = () => {
 
     const fetchTournament = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/tournament/get-tournament/${tournamentId}`);
+            const response = await axios.get(`http://27.54.151.248:3001/tournament/get-tournament/${tournamentId}`);
             const tournament = response.data;
             setTitle(tournament.title);
         } catch (error) {
@@ -50,7 +50,7 @@ const tournamentTeamPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await axios.delete(`http://localhost:3001/tournament/delete-team/${id}`);
+            const res = await axios.delete(`http://27.54.151.248:3001/tournament/delete-team/${id}`);
             window.alert(res.data.message);
             fetchTeams();
         } catch (error) {

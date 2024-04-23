@@ -74,7 +74,7 @@ const ReqEventModal = ({ isOpen, onClose }) => {
             };
 
 
-            await axios.post("http://localhost:3001/api/calendar/req-event/", reqEvent);
+            await axios.post("http://27.54.151.248:3001/api/calendar/req-event/", reqEvent);
             onClose();
         } catch (err) {
             console.error("Error Requesting event: ", err);

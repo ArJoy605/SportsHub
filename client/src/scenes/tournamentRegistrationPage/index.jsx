@@ -26,7 +26,7 @@ const TournamentRegistrationPage = () => {
 
     const fetchTournament = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/tournament/get-tournament/${tournamentId}`);
+            const response = await axios.get(`http://27.54.151.248:3001/tournament/get-tournament/${tournamentId}`);
             const tournament = response.data;
 
             setMaxParticipants(tournament.maxParticipants);
@@ -67,7 +67,7 @@ const TournamentRegistrationPage = () => {
     const createTeam = async () => {
         try {
             console.log(user);
-            const response = await axios.post(`http://localhost:3001/tournament/create-team`, {
+            const response = await axios.post(`http://27.54.151.248:3001/tournament/create-team`, {
                 whoRegistered: user._id,
                 teamName,
                 tournamentId,

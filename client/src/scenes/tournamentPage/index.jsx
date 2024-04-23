@@ -5,6 +5,7 @@ import { Typography, Box, useTheme, Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import AddTournamentModal from "@/modals/AddTournamentModal";
+import { useSelector } from "react-redux";
 
 
 const tournamentPage = () => {
@@ -13,6 +14,7 @@ const tournamentPage = () => {
     const [tournaments, setTournaments] = useState([]);
     const { palette } = useTheme();
     const main = palette.neutral.main;
+    const user = useSelector((state) => state.user);
     const [addModalOpen, setAddModalOpen] = useState(false);
 
     useEffect(() => {
@@ -26,7 +28,7 @@ const tournamentPage = () => {
 
     const fetchTournaments = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/tournament/get-tournaments");
+            const response = await axios.get("http://27.54.151.248:3001/tournament/get-tournaments");
             const data = response.data;
             const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setTournaments(sortedData);
@@ -50,7 +52,7 @@ const tournamentPage = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/tournament/delete-tournament/${id}`);
+            await axios.delete(`http://27.54.151.248:3001/tournament/delete-tournament/${id}`);
             fetchTournaments();
         } catch (error) {
             console.error("Error deleting event:", error);
@@ -64,7 +66,7 @@ const tournamentPage = () => {
         <Box>
             <Navbar />
             <WidgetWrapper align='center'>
-                <Button
+                {user.isAdmin && <Button
                     variant="contained"
                     type="submit"
                     style={{
@@ -76,7 +78,7 @@ const tournamentPage = () => {
                     onClick={() => setAddModalOpen(true)}
                 >
                     Add a new Tournament
-                </Button>
+                </Button>}
 
                 <Typography variant="h4" fontWeight="500" color={main}></Typography>
                 {tournaments.map((tournament) => (

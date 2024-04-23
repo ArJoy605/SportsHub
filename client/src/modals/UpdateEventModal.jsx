@@ -29,7 +29,7 @@
 //                 end
 //             };
 
-//             await axios.put(`http://localhost:3001/api/calendar/update-event/${eventID}`, updatedEvent);
+//             await axios.put(`http://27.54.151.248:3001/api/calendar/update-event/${eventID}`, updatedEvent);
 //             onEventUpdated(updatedEvent); // Pass updated event to parent component
 //             onClose(); // Close the modal
 //         }catch(err){
@@ -131,7 +131,7 @@
 //         end
 //       };
 
-//       await axios.put(`http://localhost:3001/api/calendar/update-event/${eventID}`, updatedEvent);
+//       await axios.put(`http://27.54.151.248:3001/api/calendar/update-event/${eventID}`, updatedEvent);
 //       onEventUpdated(updatedEvent);
 //       onClose();
 //     } catch (err) {
@@ -248,7 +248,7 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
     }, [event]);
 
     const getEvent = async (eventID) => {
-        const res = await axios.get(`http://localhost:3001/api/calendar/get-event/${eventID}`)
+        const res = await axios.get(`http://27.54.151.248:3001/api/calendar/get-event/${eventID}`)
         setLocation(res.data.location);
     }
     const onSubmit = async (event) => {
@@ -274,7 +274,7 @@ const UpdateEventModal = ({ isOpen, onEventUpdated, onClose, event, eventID, onD
                 color: x,
             };
 
-            await axios.put(`http://localhost:3001/api/calendar/update-event/${eventID}`, updatedEvent);
+            await axios.put(`http://27.54.151.248:3001/api/calendar/update-event/${eventID}`, updatedEvent);
             onEventUpdated(updatedEvent);
             onClose();
         } catch (err) {

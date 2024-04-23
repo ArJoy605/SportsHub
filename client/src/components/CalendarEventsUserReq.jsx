@@ -75,7 +75,7 @@ const CalendarEventsUserReq = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/calendar/get-events", {
+      const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-events", {
         params: {
           start: moment().startOf('month').toISOString(), // Adjust as needed
           end: moment().endOf('month').toISOString() // Adjust as needed
@@ -104,7 +104,7 @@ const CalendarEventsUserReq = () => {
   const removeEvent = async (eventId) => {
     try {
       // Send a request to delete the event by its ID
-      await axios.delete(`http://localhost:3001/api/calendar/delete-event/${eventId}`);
+      await axios.delete(`http://27.54.151.248:3001/api/calendar/delete-event/${eventId}`);
       await fetchEvents();
 
     } catch (error) {
@@ -117,11 +117,11 @@ const CalendarEventsUserReq = () => {
 
 
   const handleEventAdd = async (data) => {
-    axios.post("http://localhost:3001/api/calendar/create-event", data.event);
+    axios.post("http://27.54.151.248:3001/api/calendar/create-event", data.event);
   };
 
   const handleDatesSet = async (data) => {
-    const response = await axios.get("http://localhost:3001/api/calendar/get-events?start=" + moment(data.start).toISOString() + "&end=" + moment(data.end).toISOString());
+    const response = await axios.get("http://27.54.151.248:3001/api/calendar/get-events?start=" + moment(data.start).toISOString() + "&end=" + moment(data.end).toISOString());
     setEvents(response.data);
   }
 

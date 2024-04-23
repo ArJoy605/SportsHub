@@ -30,7 +30,7 @@ const Teams = ({ teamId, name, dept, tournamentName, onDelete }) => {
 
     const getTeamInfo = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/tournament/get-team/${teamId}`);
+            const response = await axios.get(`http://27.54.151.248:3001/tournament/get-team/${teamId}`);
             setTeamInfo(response.data);
             generatePDF(tournamentName,response.data);
             console.log(teamInfo);
