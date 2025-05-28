@@ -7,7 +7,7 @@
 - **Real-time Updates**: Stay informed with the latest scores and news.
 - **User Authentication**: Secure login and registration system.
 - **Interactive UI**: Responsive design for seamless user experience.
-- **Modular Architecture**: Organized codebase for scalability and maintenance.
+- **Modular Architecture**: Organised codebase for scalability and maintenance.
 
 ## 🛠️ Technologies Used
 
